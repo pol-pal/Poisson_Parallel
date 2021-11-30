@@ -304,7 +304,7 @@ if (dim==2 && gridmanager=="alu")
     ///////////////ADDED///////////////////////////////////
      
    // YaspGrid section
-    if (dim==2 )
+    if (dim==2 && gridmanager=="yasp" )
       {
         const int dim=2;
         typedef Dune::YaspGrid<dim> Grid;
@@ -335,7 +335,7 @@ if (dim==2 && gridmanager=="alu")
           driver(gv,fem,ptree);
         }
       }
-    if (dim==3 )
+    if (dim==3 && gridmanager=="yasp")
       {
         const int dim=3;
         typedef Dune::YaspGrid<dim> Grid;
