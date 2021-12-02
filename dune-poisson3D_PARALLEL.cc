@@ -25,15 +25,21 @@
 #include<dune/grid/io/file/vtk/subsamplingvtkwriter.hh> //DIFF
 #include <dune/grid/common/grid.hh>//added
 #include<dune/grid/io/file/gmshreader.hh>
+
+//include Parmetis
+//#include <parmetis.h>
 #include <dune/grid/utility/parmetisgridpartitioner.hh>
+
 #if HAVE_UG
 #include<dune/grid/uggrid.hh>
 #endif
+
 #if HAVE_DUNE_ALUGRID
 #include<dune/alugrid/grid.hh>
 #include<dune/alugrid/dgf.hh>
 #include<dune/grid/io/file/dgfparser/dgfparser.hh>
 #endif
+
 // dune-istl included by pdelab
 // dune-pdelab includes
 #include<dune/pdelab/common/function.hh>
@@ -52,6 +58,7 @@
 #include<dune/pdelab/localoperator/defaultimp.hh>
 #include<dune/pdelab/localoperator/pattern.hh>
 #include<dune/pdelab/localoperator/flags.hh>
+#include<dune/pdelab/localoperator/variablefactories.hh>//diff
 #include<dune/pdelab/backend/istl.hh>
 #include<dune/pdelab/stationary/linearproblem.hh>
 
@@ -63,8 +70,8 @@
 //includes for l2 norm calculation in the driver.hh
 #include<cmath>
 #include<vector>
-#include <parmetis.h>
-//#undef HAVE_DUNE_ALUGRID
+
+
 //===============================================================
 // Main program with grid setup
 //===============================================================
@@ -106,7 +113,7 @@ int main(int argc, char** argv)
   typedef Dune::UGGrid<2> Grid;
 
   std::string filename = ptree.get("grid.twod.filename","unitsquare.msh");
- 
+  std::cout << "Hello you are using UGGrid" << std::endl;
   Dune::GridFactory<Grid> factory;
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
@@ -155,9 +162,9 @@ int main(int argc, char** argv)
       {
 #if HAVE_UG
         typedef Dune::UGGrid<3> Grid;
-        std::string filename = ptree.get("grid.threed.filename","nut.msh");
+        std::string filename = ptree.get("grid.threed.filename","unitcube.msh");
         
-
+        std::cout << "Hello you are using UGGrid" << std::endl;
   Dune::GridFactory<Grid> factory;
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
@@ -173,7 +180,7 @@ int main(int argc, char** argv)
   typedef Grid::ctype DF;
   GV gv=gridp->leafGridView();
 
-/*  if(type=="parMetis"){
+  /*if(type=="parMetis"){
 
   // Create initial partitioning using ParMETIS
    std::vector<unsigned int> part
@@ -223,7 +230,7 @@ if (dim==2 && gridmanager=="alu")
   typedef Grid::ctype DF;
   GV gv=gridp->leafGridView();
 
- /* if(type=="parMetis"){
+/* if(type=="parMetis"){
 
   // Create initial partitioning using ParMETIS
    std::vector<unsigned int> part
@@ -273,7 +280,7 @@ if (dim==2 && gridmanager=="alu")
   typedef Grid::ctype DF;
   GV gv=gridp->leafGridView();
 
-/*  if(type=="parMetis"){
+ /* if(type=="parMetis"){
 
   // Create initial partitioning using ParMETIS
    std::vector<unsigned int> part
@@ -296,6 +303,8 @@ if (dim==2 && gridmanager=="alu")
           FEM fem(gv);
           driver(gv,fem,ptree);
         }
+
+
 #else
         std::cout << "You selected alugrid as grid manager but alugrid was not found during installation" << std::endl;
 #endif
