@@ -99,7 +99,7 @@ int main(int argc, char** argv)
     std::string gridmanager = ptree.get("grid.manager","yasp");//added
     const int degree = ptree.get<int>("fem.degree");
     //get partition type 
-     std::string type = ptree.get("partition.type","dune");
+    // std::string type = ptree.get("partition.type","dune");
 
 
     ////////////////ADDED//////////////////////////////////
@@ -117,13 +117,15 @@ int main(int argc, char** argv)
   Dune::GridFactory<Grid> factory;
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
-  
+
+  //if(type=="dune"){
+  gridp->loadBalance();//}
+
   Dune::Timer timer;
   gridp->globalRefine(refinement);
   std::cout << "Time for mesh refinement " << timer.elapsed()
                   << " seconds" << std::endl;
-  if(type=="dune"){
-  gridp->loadBalance();}
+  
   
   typedef Grid::LeafGridView GV;
   typedef Grid::ctype DF;
@@ -169,12 +171,14 @@ int main(int argc, char** argv)
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
   
+ //if(type=="dune"){
+  gridp->loadBalance();//}
+
   Dune::Timer timer;
   gridp->globalRefine(refinement);
   std::cout << "Time for mesh refinement " << timer.elapsed()
                   << " seconds" << std::endl;
-   if(type=="dune"){
-     gridp->loadBalance();}
+  
   
   typedef Grid::LeafGridView GV;
   typedef Grid::ctype DF;
@@ -219,13 +223,14 @@ if (dim==2 && gridmanager=="alu")
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
   
+  //if(type=="dune"){
+  gridp->loadBalance();//}
+
   Dune::Timer timer;
   gridp->globalRefine(refinement);
   std::cout << "Time for mesh refinement " << timer.elapsed()
                   << " seconds" << std::endl;
-  if(type=="dune"){
-   gridp->loadBalance();}
-  
+ 
   typedef Grid::LeafGridView GV;
   typedef Grid::ctype DF;
   GV gv=gridp->leafGridView();
@@ -269,12 +274,14 @@ if (dim==2 && gridmanager=="alu")
   Dune::GmshReader<Grid>::read(factory,filename,true,true);
   std::shared_ptr<Grid> gridp(factory.createGrid());
   
+  //if(type=="dune"){
+  gridp->loadBalance();//}
+
   Dune::Timer timer;
   gridp->globalRefine(refinement);
   std::cout << "Time for mesh refinement " << timer.elapsed()
                   << " seconds" << std::endl;
-  if(type=="dune"){
-  gridp->loadBalance();}
+  
   
   typedef Grid::LeafGridView GV;
   typedef Grid::ctype DF;
