@@ -38,11 +38,12 @@ void driver (const GV& gv, const FEM& fem,
   
 // Make grid function space
   
-  typedef Dune::PDELab::ConformingDirichletConstraints CON; 
+  //typedef Dune::PDELab::ConformingDirichletConstraints CON; 
+  typedef Dune::PDELab::OverlappingConformingDirichletConstraints CON; // NEW IN PARALLEL
   typedef Dune::PDELab::istl::VectorBackend<> VBE;
   typedef Dune::PDELab::GridFunctionSpace<GV,FEM,CON,VBE> GFS;
   GFS gfs(gv,fem);
-  gfs.name("Pk");
+  gfs.name("Vh");
 
   // Assemble constraints
   typedef typename GFS::template
@@ -62,7 +63,7 @@ void driver (const GV& gv, const FEM& fem,
 
   // Fill the coefficient vector
   Dune::PDELab::interpolate(g,gfs,z);
-  Dune::PDELab::set_nonconstrained_dofs(cc,0.0,z);
+  Dune::PDELab::setse_nonconstrained_dofs(cc,0.0,z);////////////
 
 // make vector consistent NEW IN PARALLEL //DIFF//////////////////////////////////////////////////
   Dune::PDELab::ISTL::ParallelHelper<GFS> helper(gfs);
